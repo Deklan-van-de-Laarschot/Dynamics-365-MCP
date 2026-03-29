@@ -99,11 +99,15 @@ export function registerOpportunityTools(server: McpServer, client: DynamicsClie
       description: z.string().optional().describe("Description"),
       stepname: z.string().optional().describe("Sales stage name"),
       ownerid: z.string().optional().describe("Owner (systemuser GUID) to reassign the opportunity to"),
+      parentcontactid: z.string().optional().describe("Parent contact GUID to link to the opportunity"),
     },
     async (params) => {
-      const { id, ownerid, ...data } = params;
+      const { id, ownerid, parentcontactid, ...data } = params;
       if (ownerid) {
         (data as Record<string, unknown>)["ownerid@odata.bind"] = `/systemusers(${ownerid})`;
+      }
+      if (parentcontactid) {
+        (data as Record<string, unknown>)["parentcontactid@odata.bind"] = `/contacts(${parentcontactid})`;
       }
       await client.update("opportunities", id, data);
       return { content: [{ type: "text", text: `Opportunity ${id} updated successfully.` }] };
