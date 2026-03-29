@@ -80,9 +80,13 @@ export function registerLeadTools(server: McpServer, client: DynamicsClient) {
       estimatedvalue: z.number().optional().describe("Estimated value"),
       estimatedclosedate: z.string().optional().describe("Estimated close date (YYYY-MM-DD)"),
       leadqualitycode: z.number().optional().describe("Lead quality (1=Hot, 2=Warm, 3=Cold)"),
+      ownerid: z.string().optional().describe("Owner (systemuser GUID) to reassign the lead to"),
     },
     async (params) => {
-      const { id, ...data } = params;
+      const { id, ownerid, ...data } = params;
+      if (ownerid) {
+        (data as Record<string, unknown>)["ownerid@odata.bind"] = `/systemusers(${ownerid})`;
+      }
       await client.update("leads", id, data);
       return { content: [{ type: "text", text: `Lead ${id} updated successfully.` }] };
     }

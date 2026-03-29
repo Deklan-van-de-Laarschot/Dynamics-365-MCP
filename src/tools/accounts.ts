@@ -87,9 +87,13 @@ export function registerAccountTools(server: McpServer, client: DynamicsClient) 
       revenue: z.number().optional().describe("Annual revenue"),
       numberofemployees: z.number().optional().describe("Number of employees"),
       description: z.string().optional().describe("Description"),
+      ownerid: z.string().optional().describe("Owner (systemuser GUID) to reassign the account to"),
     },
     async (params) => {
-      const { id, ...data } = params;
+      const { id, ownerid, ...data } = params;
+      if (ownerid) {
+        (data as Record<string, unknown>)["ownerid@odata.bind"] = `/systemusers(${ownerid})`;
+      }
       await client.update("accounts", id, data);
       return { content: [{ type: "text", text: `Account ${id} updated successfully.` }] };
     }

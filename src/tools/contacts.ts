@@ -86,9 +86,13 @@ export function registerContactTools(server: McpServer, client: DynamicsClient) 
       address1_postalcode: z.string().optional().describe("Postal code"),
       address1_country: z.string().optional().describe("Country"),
       description: z.string().optional().describe("Description/notes"),
+      ownerid: z.string().optional().describe("Owner (systemuser GUID) to reassign the contact to"),
     },
     async (params) => {
-      const { id, ...data } = params;
+      const { id, ownerid, ...data } = params;
+      if (ownerid) {
+        (data as Record<string, unknown>)["ownerid@odata.bind"] = `/systemusers(${ownerid})`;
+      }
       await client.update("contacts", id, data);
       return { content: [{ type: "text", text: `Contact ${id} updated successfully.` }] };
     }
