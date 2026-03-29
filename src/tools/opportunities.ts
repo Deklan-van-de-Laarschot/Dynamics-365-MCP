@@ -130,7 +130,7 @@ export function registerOpportunityTools(server: McpServer, client: DynamicsClie
     async (params) => {
       const result = await client.executeAction("WinOpportunity", {
         OpportunityClose: {
-          opportunityid: { "@odata.type": "Microsoft.Dynamics.CRM.opportunity", opportunityid: params.id },
+          "opportunityid@odata.bind": `/opportunities(${params.id})`,
           actualend: params.actualclosedate || new Date().toISOString().split("T")[0],
           actualrevenue: params.actualvalue,
           description: params.description,
@@ -152,7 +152,7 @@ export function registerOpportunityTools(server: McpServer, client: DynamicsClie
     async (params) => {
       const result = await client.executeAction("LoseOpportunity", {
         OpportunityClose: {
-          opportunityid: { "@odata.type": "Microsoft.Dynamics.CRM.opportunity", opportunityid: params.id },
+          "opportunityid@odata.bind": `/opportunities(${params.id})`,
           actualend: params.actualclosedate || new Date().toISOString().split("T")[0],
           description: params.description,
         },
