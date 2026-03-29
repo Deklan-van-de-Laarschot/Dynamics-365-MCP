@@ -1,0 +1,28 @@
+{
+  "name": "dynamics365-sales-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Dynamics 365 Sales - manage accounts, contacts, leads, opportunities, orders, invoices and more",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "dynamics365-sales-mcp": "dist/index.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["mcp", "dynamics365", "sales", "crm"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.28.0",
+    "dotenv": "^17.3.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^6.0.2"
+  }
+}
